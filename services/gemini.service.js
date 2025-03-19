@@ -62,7 +62,7 @@ async function generateResponse(message) {
     ### Required JSON Fields
     - **date**: The date of the incident in "yyyy-mm-dd" format. If the user doesn't specify a date, ask for it directly. If they are unsure, suggest today's date.
     - **location**: The place where the incident occurred (can be an address or "domicilio titular" if it's the user's home). If unclear, ask for clarification.
-    - **description**: A brief one-sentence description of what happened. If missing, ask the user for a summary.
+    - **description**: A brief one-sentence description of what happened in Spanish. If missing, ask the user for a summary.
     - **injuries**: Boolean indicating if there were any injuries (true or false). Ask if not mentioned.
     - **owner**: Boolean indicating if the user is the owner of the main object involved in the incident (true or false). Ask if unclear.
     - **complete**: Boolean indicating if all required information has been gathered. This should be "true" only when the JSON is fully complete.
