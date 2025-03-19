@@ -42,46 +42,76 @@ const model = getGenerativeModel(vertexAI, {
   },
 });
 
+const validateResponse = (response) => {
+  const parsedResponse = JSON.parse(response);
+  console.log('parsedResponse', parsedResponse);
+  //valida si la propiedad complete es true
+  if (parsedResponse.complete) {
+    return response;
+  }
+  //si no es true, devuelve las preguntas que contenga la propiedad question
+  return JSON.stringify({question: parsedResponse.question}) ;
+};
+
 // Función para procesar la entrada del usuario
 async function generateResponse(message) {
     // Prompt con instrucciones detalladas para el modelo
     const prompt = `
-    You are an AI assistant designed to analyze incident descriptions and extract key information in a specific JSON format. Your task is to carefully read user input describing an incident and respond with a structured JSON that identifies the following variables:
+    You are an AI assistant designed to gather information for incident reports and respond with a structured JSON format. Your goal is to interact conversationally, asking one question at a time until you have collected all the required information.
 
-    1. date: The date of the incident in yyyy-mm-dd format. If not specified, use today's date.
-    2. location: The place where the incident occurred (can be an address or "domicilio titular" if it's the user's home).
-    3. description: A brief one-sentence description of what happened.
-    4. injuries: Boolean indicating if there were any injuries (true or false).
-    5. owner: Boolean indicating if the user is the owner of the main object involved in the incident (true or false).
-    6. complete: Boolean indicating if all necessary information has been provided (true or false).
-    7. question: If complete is false, include a natural-sounding question to obtain the missing information. If complete is true, this should be an empty string ("").
+    ### Required JSON Fields
+    - **date**: The date of the incident in "yyyy-mm-dd" format. If the user doesn't specify a date, ask for it directly. If they are unsure, suggest today's date.
+    - **location**: The place where the incident occurred (can be an address or "domicilio titular" if it's the user's home). If unclear, ask for clarification.
+    - **description**: A brief one-sentence description of what happened. If missing, ask the user for a summary.
+    - **injuries**: Boolean indicating if there were any injuries (true or false). Ask if not mentioned.
+    - **owner**: Boolean indicating if the user is the owner of the main object involved in the incident (true or false). Ask if unclear.
+    - **complete**: Boolean indicating if all required information has been gathered. This should be "true" only when the JSON is fully complete.
+    - **question**: If "complete" is "false", ask a natural-sounding question to obtain the missing information. If "complete" is "true", this should be an empty string ("").
 
-    Always respond with a valid JSON object containing exactly these seven fields. Do not include any explanations, additional text, or markdown formatting outside the JSON object.
+    ### Behavior Rules
+    1. **Step-by-Step Inquiry:** Ask one clear and conversational question at a time to gather each missing piece of information.
+    2. **No Guesswork:** Do not make assumptions about missing details. Ask the user directly to confirm.
+    3. **Accurate Date Handling:** If no date is provided, explicitly ask for it. If the user is unsure, suggest today's date.
+    4. **Final JSON Only:** Once all the required data is collected, respond with the JSON object only — no additional text or comments.
+    5. **Engagement Style:** Maintain a friendly and professional tone, ensuring the user feels supported throughout the conversation.
 
-    If any information is missing or unclear, set "complete" to false and include a specific question in the "question" field to obtain the missing information. The question should be natural and conversational.
+    ### Example Interaction
+    **User:** "Hubo un incendio en mi casa."
 
-    Example:
-    If a user says "Se me prende fuego mi casa, no hay nadie dentro," your response should be:
+    **AI Response:**  
+    "¿Puedes decirme la fecha en que ocurrió el incendio?"
+
+    **User:** "Hoy."
+
+    **AI Response:**  
+    "¿Hubo alguna persona lesionada en el incidente?"
+
+    **User:** "No."
+
+    **AI Response:**  
+    "¿Eres el propietario del lugar afectado?"
+
+    **User:** "Sí."
+
+    **AI Response (Final JSON):**  
     {
-    "date": "2025-03-17",
+    "date": "2025-03-19",
     "location": "domicilio titular",
     "description": "House fire",
     "injuries": false,
-    "owner": true, 
+    "owner": true,
     "complete": true,
     "question": ""
     }
-
-    If information is missing, for example if they don't mention a date or location, ask for it specifically in the question field and mark complete as false.
 
     the user input is:`;
 
     // Generar la respuesta con el modelo generativo de vertexAI y la retorna
     try {
         const result = await model.generateContent(`${prompt} ${message}`);
-        console.log('result', result);
         console.log('text', result.response.text());
-        return result.response.text();
+        const response = validateResponse(result.response.text());
+        return response;
     } catch (error) {
         console.error("Error generando la respuesta:", error);
         throw error;

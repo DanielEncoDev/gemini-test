@@ -29,7 +29,7 @@ Server that uses Google's Gemini API to process and analyze incident description
 
 1. Clone the repository:
 ```bash
-git clone [REPOSITORY_URL]
+git clone https://github.com/DanielEncoDev/gemini-test.git
 cd gemini-server
 ```
 
@@ -187,3 +187,7 @@ This project is licensed under the MIT License.
 ## 👥 Authors
 
     - @danielencodev 
+
+## 🤝 Support
+
+For support, email daniel.enco12@gmail.com or open an issue in the repository.
