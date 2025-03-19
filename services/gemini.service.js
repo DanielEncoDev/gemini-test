@@ -50,7 +50,7 @@ const validateResponse = (response) => {
     return response;
   }
   //si no es true, devuelve las preguntas que contenga la propiedad question
-  return JSON.stringify({question: parsedResponse.question}) ;
+  return JSON.stringify({description: parsedResponse.description, question: parsedResponse.question}) ;
 };
 
 // Función para procesar la entrada del usuario
