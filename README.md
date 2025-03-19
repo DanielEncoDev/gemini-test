@@ -1,71 +1,71 @@
 # Gemini Server
 
-Servidor que utiliza la API de Google Gemini para procesar y analizar descripciones de incidentes, proporcionando respuestas estructuradas en formato JSON.
+Server that uses Google's Gemini API to process and analyze incident descriptions, providing structured responses in JSON format.
 
-## 🚀 Características
+## 🚀 Features
 
-- Procesamiento de descripciones de incidentes usando IA generativa
-- Autenticación mediante JWT
-- Respuestas estructuradas en formato JSON
-- Validación de datos de entrada
-- Manejo de errores robusto
+- Incident description processing using generative AI
+- JWT authentication
+- Structured JSON responses
+- Input data validation
+- Robust error handling
 
-## 🛠️ Tecnologías Utilizadas
+## 🛠️ Technologies Used
 
 - Node.js
 - Express.js
 - Firebase Vertex AI (Gemini)
-- JWT para autenticación
-- Jest para pruebas unitarias
+- JWT for authentication
+- Jest for unit testing
 
-## 📋 Prerrequisitos
+## 📋 Prerequisites
 
-- Node.js (v14 o superior)
-- npm o yarn
-- Cuenta de Google Cloud con acceso a Vertex AI
-- Credenciales de Firebase
+- Node.js (v14 or higher)
+- npm or yarn
+- Google Cloud account with Vertex AI access
+- Firebase credentials
 
-## 🔧 Instalación
+## 🔧 Installation
 
-1. Clonar el repositorio:
+1. Clone the repository:
 ```bash
-git clone https://github.com/DanielEncoDev/gemini-test.git
+git clone [REPOSITORY_URL]
 cd gemini-server
 ```
 
-2. Instalar dependencias:
+2. Install dependencies:
 ```bash
 npm install
 ```
 
-3. Crear archivo `.env` en la raíz del proyecto con las siguientes variables:
+3. Create `.env` file in the project root with the following variables:
 ```env
 # Firebase Config
-API_KEY=tu_api_key
-AUTH_DOMAIN=tu_auth_domain
-PROJECT_ID=tu_project_id
-STORAGE_BUCKET=tu_storage_bucket
-MESSAGING_SENDER_ID=tu_messaging_sender_id
-APP_ID=tu_app_id
-MEASUREMENT_ID=tu_measurement_id
+API_KEY=your_api_key
+AUTH_DOMAIN=your_auth_domain
+PROJECT_ID=your_project_id
+STORAGE_BUCKET=your_storage_bucket
+MESSAGING_SENDER_ID=your_messaging_sender_id
+APP_ID=your_app_id
+MEASUREMENT_ID=your_measurement_id
 
 # JWT
-JWT_SECRET=tu_jwt_secret
+JWT_SECRET=your_jwt_secret
 ```
 
-## 🚀 Uso
+## 🚀 Usage
 
-1. Iniciar el servidor en modo desarrollo:
+1. Start the server in development mode:
 ```bash
 npm run dev
 ```
 
-2. Iniciar el servidor en modo producción:
+2. Start the server in production mode:
 ```bash
 npm start
 ```
 
-3. Ejecutar pruebas:
+3. Run tests:
 ```bash
 npm test
 ```
@@ -73,13 +73,13 @@ npm test
 ## 📝 API Endpoints
 
 ### POST /api/auth/login
-Autenticación de usuario.
+User authentication.
 
 **Request Body:**
 ```json
 {
-    "email": "usuario@ejemplo.com",
-    "password": "contraseña"
+    "email": "user@example.com",
+    "password": "password"
 }
 ```
 
@@ -87,22 +87,22 @@ Autenticación de usuario.
 ```json
 {
     "token": "jwt_token",
-    "user": "usuario"
+    "user": "user"
 }
 ```
 
 ### POST /api/gemini
-Procesa una descripción de incidente.
+Process an incident description.
 
 **Headers:**
 ```
-Authorization: <jwt_token>
+Authorization: Bearer <jwt_token>
 ```
 
 **Request Body:**
 ```json
 {
-    "message": "Se me prende fuego mi casa, no hay nadie dentro"
+    "message": "My house caught fire, no one is inside"
 }
 ```
 
@@ -110,7 +110,7 @@ Authorization: <jwt_token>
 ```json
 {
     "date": "2024-03-20",
-    "location": "domicilio titular",
+    "location": "owner's residence",
     "description": "House fire",
     "injuries": false,
     "owner": true,
@@ -119,70 +119,70 @@ Authorization: <jwt_token>
 }
 ```
 
-## 🔍 Decisiones Técnicas
+## 🔍 Technical Decisions
 
-### 1. Elección de Vertex AI (Gemini)
-- Se eligió Vertex AI por su integración nativa con Firebase para poder generar respuestas estructuradas tipo JSON (application/json)
-- El modelo Gemini 2.0 Flash ofrece excelente rendimiento para tareas de procesamiento de texto
-- La configuración de temperatura en 0.2 asegura respuestas consistentes y estructuradas
+### 1. Vertex AI (Gemini) Choice
+- Vertex AI was chosen for its native Firebase integration
+- Gemini 2.0 Flash model offers excellent performance for text processing tasks
+- Temperature setting of 0.2 ensures consistent and structured responses
 
-### 2. Estructura del Proyecto
+### 2. Project Structure
 ```
 gemini-server/
-├── controllers/     # Lógica de negocio
-├── routes/         # Definición de rutas
-├── services/       # Servicios externos
-├── __tests__/      # Pruebas unitarias
-└── config/         # Configuraciones
+├── controllers/     # Business logic
+├── routes/         # Route definitions
+├── services/       # External services
+├── __tests__/      # Unit tests
+└── config/         # Configurations
 ```
 
-### 3. Autenticación
-- Implementación de JWT para autenticación stateless
-- Middleware de validación de token para proteger rutas sensibles
-- Extracción del nombre de usuario desde el email para simplificación
+### 3. Authentication
+- JWT implementation for stateless authentication
+- Token validation middleware for protecting sensitive routes
+- Username extraction from email for simplification
 
-### 4. Manejo de Datos
-- Esquema JSON definido para estandarizar respuestas
-- Validación de datos de entrada
-- Manejo de errores con mensajes descriptivos
+### 4. Data Handling
+- Defined JSON schema for response standardization
+- Input data validation
+- Descriptive error handling
 
-## 🧪 Pruebas
+## 🧪 Testing
 
-El proyecto incluye pruebas unitarias para:
-- Controlador de autenticación
-- Servicio de Gemini
-- Validación de respuestas
+The project includes unit tests for:
+- Authentication controller
+- Gemini service
+- Response validation
 
-Para ejecutar las pruebas:
+To run the tests:
 ```bash
 npm test
 ```
 
-## 🔒 Seguridad
+## 🔒 Security
 
-- Tokens JWT para autenticación
-- Variables de entorno para credenciales sensibles
-- Validación de datos de entrada
-- Manejo seguro de errores
+- JWT tokens for authentication
+- Environment variables for sensitive credentials
+- Input data validation
+- Secure error handling
 
-## 📦 Dependencias Principales
+## 📦 Main Dependencies
 
 - express: ^4.21.2
 - firebase: ^11.4.0
 - jsonwebtoken: ^9.0.2
 - jest: ^29.7.0 (dev)
 
-## 🤝 Contribución
+## 🤝 Contributing
 
-1. Fork el proyecto
-2. Crear una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abrir un Pull Request
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-## 📄 Licencia
+## 📄 License
 
-Este proyecto está bajo la Licencia MIT. 
+This project is licensed under the ISC License. 
 
 ## 👥 Authors
 
